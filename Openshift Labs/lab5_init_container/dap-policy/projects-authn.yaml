@@ -1,0 +1,21 @@
+# Sample openshift authenticator policy policy
+- !policy
+  id: conjur/authn-k8s/ocp/apps
+  owner: !group admins
+  annotations:
+     description: Identities permitted to authenticator to this cluster
+  body:
+   - !layer
+     annotations:
+       description: Layer of authenticator identities to call authn service
+   - &hosts
+     - !host
+       id: cityapp/*/*
+       annotations:
+         kubernetes/authentication-container-name: authenticator
+         openshift: true
+
+     # add hosts to the apps layer
+   - !grant
+     role: !layer
+     members: *hosts

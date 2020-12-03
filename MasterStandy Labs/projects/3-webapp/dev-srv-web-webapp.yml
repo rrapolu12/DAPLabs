@@ -1,0 +1,27 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: dev/srv/web
+# LOAD SYNTAX: conjur policy load dev/srv/web <file>.yml
+#-----------------------------------------------------------
+
+# HOST: Create Web Server Hosts
+- !host
+  id: webapp01
+  annotations:
+    Role: Web Server
+    Hostname: webapp01.cyber-ark-demo.local
+
+# LAYER: Create Web Server LAYER: dev/srv/web
+- !layer 
+  annotations:
+    Environment: Development
+    Platform: Servers
+    Role: Web Server
+   
+# GRANT: Assign Web Server Hosts to LAYER: dev/srv/web
+- !grant
+  role: !layer
+  member: !host webapp01
+
+...

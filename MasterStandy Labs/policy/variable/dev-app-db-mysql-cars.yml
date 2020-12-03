@@ -1,0 +1,40 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: dev/app/db
+# LOAD SYNTAX: conjur policy load dev/app/db <file>.yml
+#-----------------------------------------------------------
+
+# VARIABLE: Create MySQL Secrets for PROJECT: cars
+- !variable
+  id: mysql/cars/cardbapp/username
+  kind: password
+  annotations:
+    Project: cars
+    Identifier: cardbapp	
+    Description: MySQL Database Username (cars/cardbapp)
+
+- !variable
+  id: mysql/cars/cardbapp/password
+  kind: password
+  annotations:
+    Project: cars
+    Identifier: cardbapp	
+    Description: MySQL Database Password (cars/cardbapp)
+
+# PERMIT: Assign Secret Permissions for PROJECT: cars
+- !permit
+  resource: !variable mysql/cars/cardbapp/username
+  privileges: [read, execute]
+  roles:
+    - !group /dev/srv/srv-admins
+    - !group /dev/app/db/mysql/cars/delegation/consumers
+
+- !permit
+  resource: !variable mysql/cars/cardbapp/password
+  privileges: [read, execute]
+  roles:
+    - !group /dev/srv/srv-admins
+    - !group /dev/app/db/mysql/cars/delegation/consumers
+
+...

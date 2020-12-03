@@ -1,0 +1,27 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: dev/srv/nix
+# LOAD SYNTAX: conjur policy load dev/srv/nix <file>.yml
+#-----------------------------------------------------------
+
+# HOST: Create Linux Server Hosts
+- !host
+  id: docker-host2
+  annotations:
+    Role: Linux Server
+    Hostname: docker-host2.cyber-ark-demo.local
+
+# LAYER: Create Linux Server LAYER: dev/srv/nix
+- !layer 
+  annotations:
+    Environment: Development
+    Platform: Servers
+    Role: Linux Docker Server
+   
+# GRANT: Assign Linux Server Hosts to LAYER: dev/srv/nix
+- !grant
+  role: !layer
+  member: !host docker-host2
+
+...

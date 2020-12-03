@@ -1,0 +1,11 @@
+# Define secrets the app has access to
+- !policy
+  id: openshift-apps/cityapp
+  owner: !group admins
+  body:
+  - !layer
+
+  - !grant
+    role: !layer
+    members:
+    - !host /conjur/authn-k8s/ocp/apps/cityapp/*/*

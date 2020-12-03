@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cityapp-hardcode-02
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cityapp-hardcode-02
+  labels:
+    app: cityapp-hardcode-02
+spec:
+  ports:
+  - port: 3000
+    name: http
+  selector:
+    app: cityapp-hardcode-02
+  type: LoadBalancer
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: cityapp-hardcode-02
+  name: cityapp-hardcode-02
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: cityapp-hardcode-02
+  wildcardPolicy: None
+---
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: cityapp-hardcode-02
+  name: cityapp-hardcode-02
+spec:
+  replicas: 1
+  selector:
+    app: cityapp-hardcode-02
+  template:
+    metadata:
+      labels:
+        app: cityapp-hardcode-02
+    spec:
+      serviceAccountName: cityapp-hardcode-02
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/cityapp/cityapp:1.0
+        imagePullPolicy: Always
+        name: cityapp
+        env:
+          - name: DBAddress
+            value: "mysql.cyber-ark-demo.local"
+          - name: DBName
+            value: "world"
+          - name: DBPort
+            value: "3306"
+          - name: DBUsername
+            value: "cityapp-db02"
+          - name: DBPassword
+            value: "Cyberark2"
+        ports:
+        - containerPort: 3000
+          name: http

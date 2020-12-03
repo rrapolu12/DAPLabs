@@ -1,0 +1,18 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: root
+# LOAD SYNTAX: conjur policy load root <file>.yml
+#-----------------------------------------------------------
+
+# GROUP: Create Delegation Consumers Group
+- !group
+  id: dev/app/db/mysql/cars/delegation/consumers
+  owner: !group dap-admins
+  annotations:
+    Description: Delegation Consumers Group
+    Role: Database (db)
+    Application: MySQL
+    Project: cars
+
+...

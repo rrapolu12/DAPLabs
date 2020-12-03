@@ -1,0 +1,29 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: root
+# LOAD SYNTAX: conjur policy load root <file>.yml
+#-----------------------------------------------------------
+
+# GROUP: Create DAP Security Admins Group
+- !group
+  id: dap-admins
+  owner: !user admin
+  annotations:
+    Department: DAP Security Admins
+
+# PERMIT: Assign admins-dap GROUP full control permissions (root Branch)
+- !permit
+  role: !group dap-admins
+  privileges: [ read, create, update ]
+  resources:
+    - !policy root
+
+# POLICY: Create dev Branch 
+- !policy
+  id: dev
+  owner: !group dap-admins
+  annotations:
+    Environment: Development
+
+...

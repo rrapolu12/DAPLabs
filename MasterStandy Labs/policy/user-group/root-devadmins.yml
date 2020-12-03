@@ -1,0 +1,41 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: root
+# LOAD SYNTAX: conjur policy load root <file>.yml
+#-----------------------------------------------------------
+
+# GROUP: Create Developer Admins Group
+- !group
+  id: dev/app/dev-admins
+  owner: !group dap-admins
+  annotations:
+    Department: Software Engineering
+
+# USER: Create Developer Users
+- !user
+  id: developer01
+  owner: !group dap-admins
+  annotations:
+    Email: developer01@cyber-ark-demo.local
+    Title: Software Developer
+    Department: Software Engineering
+
+- !user
+  id: developer02
+  owner: !group dap-admins
+  annotations:
+    Email: developer02@cyber-ark-demo.local
+    Title: Software Developer
+    Department: Software Engineering
+
+# GRANT: Assign Developer Users to GROUP: dev/app/dev-admins
+- !grant
+  role: !group dev/app/dev-admins
+  member: !user developer01
+
+- !grant
+  role: !group dev/app/dev-admins
+  member: !user developer02
+
+...

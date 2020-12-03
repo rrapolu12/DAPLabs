@@ -1,0 +1,18 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: root
+# LOAD SYNTAX: conjur policy load root <file>.yml
+#-----------------------------------------------------------
+
+# Assign Jenkins Server Layer to Delegation Consumers GROUP: dev/app/db/mysql/cars/delegation/consumers
+- !grant
+  role: !group dev/app/db/mysql/cars/delegation/consumers
+  member: !layer dev/srv/jenkins
+
+# Assign Jenkins Server Layer to Delegation Consumers GROUP: pas_dev/app/db-mysql-cars/delegation/consumers
+- !grant
+  role: !group pas_dev/app/db-mysql-cars/delegation/consumers
+  member: !layer dev/srv/jenkins
+
+...

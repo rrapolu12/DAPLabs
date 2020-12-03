@@ -1,0 +1,88 @@
+<?php
+
+/**************************************************************
+ File: config.ph
+ Status: DAP REST API for secrets retrieval
+   - Edit the values in DAP Variables section
+**************************************************************/
+
+/*** DAP Variables ***/
+$dapServer = "dap-master.cyber-ark-demo.local";
+$dapUser = "host%2Fdev%2Fsrv%2Fweb%2Fwebapp01";
+$apiKey = "  *****  INSERT API KEY HERE  *****";
+$dapAccount = "CAU";
+$varUser = "dev%2Fapp%2Fdb%2Fmysql%2Fcars%2Fcardbapp%2Fusername"; 
+$varPass = "dev%2Fapp%2Fdb%2Fmysql%2Fcars%2Fcardbapp%2Fpassword"; 
+
+/*** DAP REST API: Request Temporary Access Token ***/
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+curl_setopt($ch, CURLOPT_URL, "https://$dapServer/authn/$dapAccount/$dapUser/authenticate");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+curl_setopt($ch, CURLOPT_POST, TRUE);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $apiKey);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: text/plain"
+));
+$response = curl_exec($ch);
+if(curl_exec($ch) === false)
+{
+  echo 'curl_setopt Error: ' . curl_error($ch);
+}
+else
+{
+  $token = base64_encode($response);
+}
+curl_close($ch);
+
+/*** DAP REST API: Retrieve Username Value ***/
+$ch2 = curl_init();
+curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, FALSE);
+curl_setopt($ch2, CURLOPT_URL, "https://$dapServer/secrets/$dapAccount/variable/$varUser");
+curl_setopt($ch2, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch2, CURLOPT_HEADER, FALSE);
+curl_setopt($ch2, CURLOPT_HTTPHEADER, array(
+  "Authorization: Token token=\"$token\""
+));
+$response2 = curl_exec($ch2);
+if(curl_exec($ch2) === false)
+{
+  echo 'curl_setopt Error: ' . curl_error($ch2);
+}
+else
+{
+  $userValue = $response2;
+}
+curl_close($ch2);
+
+/*** DAP REST API: Retrieve Password Value ***/
+$ch3 = curl_init();
+curl_setopt($ch3, CURLOPT_SSL_VERIFYPEER, FALSE);
+curl_setopt($ch3, CURLOPT_URL, "https://$dapServer/secrets/$dapAccount/variable/$varPass");
+curl_setopt($ch3, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch3, CURLOPT_HEADER, FALSE);
+curl_setopt($ch3, CURLOPT_HTTPHEADER, array(
+  "Authorization: Token token=\"$token\""
+));
+$response3 = curl_exec($ch3);
+if(curl_exec($ch3) === false)
+{
+  echo 'curl_setopt Error: ' . curl_error($ch3);
+}
+else
+{
+  $passValue = $response3;
+}
+curl_close($ch3);
+
+
+/*** Database Connection Configuration ***/
+$host       = "localhost";
+$username   = $userValue;
+$password   = $passValue;
+$dbname     = "cars";
+$dsn        = "mysql:host=$host;dbname=$dbname";
+$options    = array(
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+              );

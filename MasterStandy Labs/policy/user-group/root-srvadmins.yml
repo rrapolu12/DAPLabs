@@ -1,0 +1,41 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: root
+# LOAD SYNTAX: conjur policy load root <file>.yml
+#-----------------------------------------------------------
+
+# GROUP: Create Server Admins Group
+- !group
+  id: dev/srv/srv-admins
+  owner: !group dap-admins
+  annotations:
+    Department: Systems Operations
+
+# USER: Create Systems Administrator Users
+- !user
+  id: sysadmin01
+  owner: !group dap-admins
+  annotations:
+    Email: sysadmin01@cyber-ark-demo.local
+    Title: Systems Administrator
+    Department: Systems Operations
+
+- !user
+  id: sysadmin02
+  owner: !group dap-admins
+  annotations:
+    Email: sysadmin02@cyber-ark-demo.local
+    Title: Systems Administrator
+    Department: Systems Operations
+
+# GRANT: Assign Systems Administrator Users to GROUP: dev/srv/srv-admins
+- !grant
+  role: !group dev/srv/srv-admins
+  member: !user sysadmin01
+
+- !grant
+  role: !group dev/srv/srv-admins
+  member: !user sysadmin02
+
+...

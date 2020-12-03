@@ -1,0 +1,8 @@
+---
+
+# Delete Users 
+
+- !delete
+  record: !user testuser02
+
+...

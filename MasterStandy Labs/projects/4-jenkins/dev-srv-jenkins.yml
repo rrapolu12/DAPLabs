@@ -1,0 +1,27 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: dev/srv/jenkins
+# LOAD SYNTAX: conjur policy load dev/srv/jenkins <file>.yml
+#-----------------------------------------------------------
+
+# HOST: Create Jenkins Server Host
+- !host 
+  id: jenkins01
+  annotations:
+    Role: Jenkins Server
+    Hostname: jenkins01.cyber-ark-demo.local
+
+# LAYER: Create Jenkins Server LAYER: dev/srv/jenkins
+- !layer 
+  annotations:
+    Environment: Development
+    Platform: Servers
+    Role: Jenkins
+   
+# GRANT: Assign Jenkins Server Hosts to LAYER: dev/srv/jenkins
+- !grant
+  role: !layer
+  member: !host jenkins01
+
+...

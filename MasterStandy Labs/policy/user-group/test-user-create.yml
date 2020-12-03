@@ -1,0 +1,21 @@
+---
+
+# Create Users 
+
+- !user
+  id: testuser01
+  owner: !group dap-admins
+  annotations:
+    Email: testuser01@cyber-ark-demo.local
+    Title: Test User
+    Department: Test User
+
+- !user
+  id: testuser02
+  owner: !group dap-admins
+  annotations:
+    Email: testuser02@cyber-ark-demo.local
+    Title: Test User
+    Department: Test User
+
+...

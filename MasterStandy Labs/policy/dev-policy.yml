@@ -1,0 +1,46 @@
+---
+
+#------------------------------------------------------
+# POLICY BRANCH: dev
+# LOAD SYNTAX: conjur policy load dev <file>.yml
+#------------------------------------------------------
+
+#--- HOST/LAYER POLICY --------------
+# POLICY: Create PLATFORM: Servers (srv)
+- !policy
+  id: srv
+  owner: !group /dev/srv/srv-admins
+  annotations:
+    Platform: Servers
+  body:
+    # POLICY: Create ROLE: Jenkins Servers (jenkins)
+    - !policy
+      id: jenkins
+      annotations:
+        Role: Jenkins Servers (jenkins)
+    # POLICY: Create ROLE: Linux Servers (nix)
+    - !policy
+      id: nix
+      annotations:
+        Role: Linux Servers (nix)
+    # POLICY: Create ROLE: Web Servers (web)
+    - !policy
+      id: web
+      annotations:
+        Role: Web Servers (web)
+ 
+#--- VARIABLE POLICY ---------------
+# POLICY: Create PLATFORM: Applications (app)
+- !policy
+  id: app
+  owner: !group /dev/app/dev-admins
+  annotations:
+    Platform: Applications
+  body:
+    # POLICY: Create ROLE: Database Secrets (db)
+    - !policy 
+      id: db
+      annotations:
+        Role: Database Secrets (db)
+  
+...

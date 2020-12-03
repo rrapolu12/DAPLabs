@@ -1,0 +1,34 @@
+---
+
+#-----------------------------------------------------------
+# POLICY BRANCH: root
+# LOAD SYNTAX: conjur policy load root <file>.yml
+#-----------------------------------------------------------
+
+# USER: Create DAP Admin Users
+- !user
+  id: dapadmin01
+  owner: !group dap-admins
+  annotations:
+    Email: dapadmin01@cyber-ark-demo.local
+    Title: DAP Security Administrator
+    Department: InfoSec
+
+- !user
+  id: dapadmin02
+  owner: !group dap-admins
+  annotations:
+    Email: dapadmin02@cyber-ark-demo.local
+    Title: DAP Security Administrator
+    Department: InfoSec
+
+# GRANT: Assign DAP Admin Users to GROUP: dap-admins
+- !grant
+  role: !group dap-admins
+  member: !user dapadmin01
+
+- !grant
+  role: !group dap-admins
+  member: !user dapadmin02
+
+...
